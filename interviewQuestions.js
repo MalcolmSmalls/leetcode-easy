@@ -81,3 +81,42 @@ function longestSubString(str) {
 }
 
 console.log(longestSubString('pinky'))
+
+// Reverse Integer
+
+var reverse = function (x) {
+  const numReversed = Math.abs(x).toString().split('').reverse().join('')
+  if (numReversed > 2 ** 31 || numReversed < -(2 ** 31)) return 0
+  return numReversed * Math.sign(x)
+}
+
+console.log(reverse(1563847412))
+
+// Longest Palindromic String
+
+function longestPalindrome(str) {
+  if (str.length < 1 && str === null) return ''
+  let longest = ''
+  for (let i = 0; i < str.length; i++) {
+    const oddPalindrome = expandFromCenter(str, i, i)
+    const evenPalindrome = expandFromCenter(str, i - 1, i)
+    if (oddPalindrome.length > longest.length) {
+      longest = oddPalindrome
+    }
+    if (evenPalindrome.length > longest.length) {
+      longest = evenPalindrome
+    }
+  }
+  return longest
+}
+
+function expandFromCenter(str, left, right) {
+  let i = 0
+  while (str[left - i] && str[left - i] === str[right + i]) {
+    i++
+  }
+  i--
+  return str.slice(left - i, right + i + 1)
+}
+
+console.log(longestPalindrome('cbbd'))
