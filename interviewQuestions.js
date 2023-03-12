@@ -120,3 +120,14 @@ function expandFromCenter(str, left, right) {
 }
 
 console.log(longestPalindrome('cbbd'))
+
+// String to Integer (atoi)
+var myAtoi = function (s) {
+  if (isNaN(parseInt(s))) return 0
+  let sign = s.includes('-')
+  if (!sign && parseInt(s) > 2 ** 31 - 1) return 2 ** 31 - 1
+  if (sign && parseInt(s) < -(2 ** 31)) return -(2 ** 31)
+  return sign ? -parseInt(s) * Math.sign(-1) : parseInt(s)
+}
+
+console.log(myAtoi('   -42'))
