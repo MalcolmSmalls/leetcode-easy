@@ -122,12 +122,58 @@ function expandFromCenter(str, left, right) {
 console.log(longestPalindrome('cbbd'))
 
 // String to Integer (atoi)
-var myAtoi = function (s) {
-  if (isNaN(parseInt(s))) return 0
-  let sign = s.includes('-')
-  if (!sign && parseInt(s) > 2 ** 31 - 1) return 2 ** 31 - 1
-  if (sign && parseInt(s) < -(2 ** 31)) return -(2 ** 31)
-  return sign ? -parseInt(s) * Math.sign(-1) : parseInt(s)
+// var myAtoi = function (s) {
+//   if (isNaN(parseInt(s))) return 0
+//   let sign = s.includes('-')
+//   if (!sign && parseInt(s) > 2 ** 31 - 1) return 2 ** 31 - 1
+//   if (sign && parseInt(s) < -(2 ** 31)) return -(2 ** 31)
+//   return sign ? -parseInt(s) * -1 : parseInt(s)
+// }
+
+var myAtoi = function (str) {
+  const firstNonWhitespaceSequence = str.trim().split(' ')[0]
+  const isCorrectlyFormatted =
+    firstNonWhitespaceSequence.match(/^[+-]{0,1}[0-9]+/)
+  if (!isCorrectlyFormatted) return 0
+  let numericValue = isCorrectlyFormatted[0]
+  const signMultiplier = numericValue[0] === '-' ? -1 : 1
+  numericValue = isNaN(Number(numericValue[0]))
+    ? numericValue.slice(1)
+    : numericValue
+  const INT_MAX = Math.pow(2, 31) - 1
+  const INT_MIN = -Math.pow(2, 31)
+  if (numericValue.length > 10) {
+    return signMultiplier === -1 ? INT_MIN : INT_MAX
+  }
+  numericValue = Number(numericValue) * signMultiplier
+  if (numericValue > INT_MAX) return INT_MAX
+  if (numericValue < INT_MIN) return INT_MIN
+  return numericValue
 }
 
-console.log(myAtoi('   -42'))
+// console.log(myAtoi())
+
+// Container with Most Water
+
+var maxArea = function (height) {
+  let leftPointer = 0
+  let rightPointer = height.length - 1
+  let maxAreaCalculated = findArea(leftPointer, rightPointer, height)
+  while (leftPointer < rightPointer) {
+    if (height[leftPointer] < height[rightPointer]) {
+      leftPointer++
+    } else {
+      rightPointer--
+    }
+    const currentArea = findArea(leftPointer, rightPointer, height)
+    maxAreaCalculated = Math.max(maxAreaCalculated, currentArea)
+  }
+  return maxAreaCalculated
+}
+
+var findArea = function (leftPointer, rightPointer, height) {
+  const width = rightPointer - leftPointer
+  const length = Math.min(height[leftPointer], height[rightPointer])
+  const area = width * length
+  return area
+}
